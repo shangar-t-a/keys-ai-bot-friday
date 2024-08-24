@@ -1,6 +1,6 @@
 [tool.poetry]
 
-name = "friday"
+name = "keys-ai-bot-friday"
 version = "0.0.0"
 description = "Keys AI Bot (Friday)"
 authors = ["Keys (Shangar) <shangar202000@gmail.com>"]
