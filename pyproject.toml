@@ -1,0 +1,15 @@
+[tool.poetry]
+
+name = "keys-ai-bot-friday"
+version = "0.0.0"
+description = "Keys AI Bot (Friday)"
+authors = ["Keys (Shangar) <shangar202000@gmail.com>"]
+readme = "README.md"
+license = "LICENSE"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
