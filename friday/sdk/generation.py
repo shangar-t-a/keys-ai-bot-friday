@@ -1,7 +1,8 @@
 """Generation SDKs for Friday built from Google Generative AI."""
 
 # Standard Library
-from typing import Annotated
+from typing import Annotated, Optional
+from dataclasses import dataclass
 
 # Project Library
 from friday.utilities.exceptions import FridayBaseException
@@ -15,6 +16,18 @@ from google.generativeai import protos
 
 class FridayGenerationError(FridayBaseException):
     """Friday Generation Error in the SDK."""
+
+
+@dataclass
+class FridayResponse:
+    """Friday Response for the Generation SDK."""
+
+    response: str
+    response_object: Optional[GenerateContentResponse] = None
+
+    def __str__(self) -> str:
+        """Return the response as a string."""
+        return f"Response: {self.response.strip()}"
 
 
 class GoogleAIGeneration:
@@ -34,7 +47,7 @@ class GoogleAIGeneration:
         """
         self.__model = genai_model.model
 
-    def generate_content(self, prompt: str) -> str:
+    def generate_content(self, prompt: str) -> FridayResponse:
         """
         Generate content using the configured model.
 
@@ -42,10 +55,10 @@ class GoogleAIGeneration:
             prompt (str): Prompt for generating content.
 
         Returns:
-            str: Generated content.
+            FridayResponse: Response from the model for the prompt.
         """
-        content: GenerateContentResponse = self.__model.generate_content(prompt)
-        return content.text
+        response: GenerateContentResponse = self.__model.generate_content(prompt)
+        return FridayResponse(response=response.text, response_object=response)
 
     def start_new_chat(self) -> ChatSession:
         """
@@ -56,7 +69,7 @@ class GoogleAIGeneration:
         """
         return self.__model.start_chat(history=[])
 
-    def send_chat_message(self, chat: ChatSession, message: str) -> str:
+    def send_chat_message(self, chat: ChatSession, message: str) -> FridayResponse:
         """
         Send a message to the chat session with Friday and get the response from the chat session.
 
@@ -65,10 +78,10 @@ class GoogleAIGeneration:
             message (str): Message to be sent to the chat session.
 
         Returns:
-            str: Response from the chat session.
+            FridayResponse: Response from the chat session for the message.
         """
         response: GenerateContentResponse = chat.send_message(message)
-        return response.text
+        return FridayResponse(response=response.text, response_object=response)
 
     def get_chat_history(self, chat: ChatSession) -> dict:
         """
@@ -100,11 +113,18 @@ class GoogleAIGeneration:
 
 
 if __name__ == "__main__":
+    # Test the Generation SDK
     model = GoogleAIModel()
     ai_gen = GoogleAIGeneration(genai_model=model)
     print(ai_gen)
-    print(ai_gen.generate_content(prompt="Who is the president of the United States?").strip())
+
+    # Test Generate Content
+    gen_response = ai_gen.generate_content(prompt="Who is the president of the United States?")
+    print(f"Response: {gen_response.response.strip()}, Response Object: {gen_response.response_object}")
+
+    # Test Chat Session
     chat = ai_gen.start_new_chat()
-    print(ai_gen.send_chat_message(chat=chat, message="What is the capital of India?").strip())
-    print(ai_gen.get_chat_history(chat=chat))
-    print(ai_gen._count_tokens(text=chat.history))
+    chat_response = ai_gen.send_chat_message(chat=chat, message="What is the capital of India?")
+    print(f"Chat Response: {chat_response.response.strip()}, Chat Response Object: {chat_response.response_object}")
+    print(f"Chat History:\n{ai_gen.get_chat_history(chat=chat)}")
+    print(f"Token Count: {ai_gen._count_tokens(text=chat.history)}")
