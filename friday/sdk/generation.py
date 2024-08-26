@@ -11,7 +11,7 @@ from friday.sdk.model import GoogleAIModel
 # Type hints
 from google.generativeai.generative_models import ChatSession
 from google.generativeai.types.generation_types import GenerateContentResponse
-from google.generativeai import protos
+from google.generativeai import GenerationConfig, protos
 
 
 class FridayGenerationError(FridayBaseException):
@@ -47,7 +47,30 @@ class GoogleAIGeneration:
         """
         self.__model = genai_model.model
 
-    def generate_content(self, prompt: str) -> FridayResponse:
+    @staticmethod
+    def generation_config(
+        candidate_count: int = 1, max_output_tokens: int = 1000, temperature: float = 0.5
+    ) -> GenerationConfig:
+        """
+        Create a generation configuration for the model.
+
+        Args:
+            candidate_count (int, optional): Number of candidates to generate. Defaults to 1.
+            max_output_tokens (int, optional): Maximum number of tokens to generate. Defaults to 1000.
+            temperature (float, optional): Temperature for generation. Defaults to 0.5. Range: [0.0, 1.0].
+
+        Returns:
+            GenerationConfig: Generation configuration for the model.
+        """
+        return GenerationConfig(
+            candidate_count=candidate_count,
+            max_output_tokens=max_output_tokens,
+            temperature=temperature,
+        )
+
+    def generate_content(
+        self, prompt: str, *, generation_config: GenerationConfig = generation_config()
+    ) -> FridayResponse:
         """
         Generate content using the configured model.
 
@@ -57,7 +80,7 @@ class GoogleAIGeneration:
         Returns:
             FridayResponse: Response from the model for the prompt.
         """
-        response: GenerateContentResponse = self.__model.generate_content(prompt)
+        response: GenerateContentResponse = self.__model.generate_content(prompt, generation_config=generation_config)
         return FridayResponse(response=response.text, response_object=response)
 
     def start_new_chat(self) -> ChatSession:
@@ -119,12 +142,17 @@ if __name__ == "__main__":
     print(ai_gen)
 
     # Test Generate Content
-    gen_response = ai_gen.generate_content(prompt="Who is the president of the United States?")
-    print(f"Response: {gen_response.response.strip()}, Response Object: {gen_response.response_object}")
+    if True:
+        generation_config = ai_gen.generation_config(candidate_count=1, max_output_tokens=15, temperature=0.5)
+        gen_response = ai_gen.generate_content(
+            prompt="Who is the president of the United States?", generation_config=generation_config
+        )
+        print(f"Response: {gen_response.response.strip()}, Response Object: {gen_response.response_object}")
 
     # Test Chat Session
-    chat = ai_gen.start_new_chat()
-    chat_response = ai_gen.send_chat_message(chat=chat, message="What is the capital of India?")
-    print(f"Chat Response: {chat_response.response.strip()}, Chat Response Object: {chat_response.response_object}")
-    print(f"Chat History:\n{ai_gen.get_chat_history(chat=chat)}")
-    print(f"Token Count: {ai_gen._count_tokens(text=chat.history)}")
+    if True:
+        chat = ai_gen.start_new_chat()
+        chat_response = ai_gen.send_chat_message(chat=chat, message="What is the capital of India?")
+        print(f"Chat Response: {chat_response.response.strip()}, Chat Response Object: {chat_response.response_object}")
+        print(f"Chat History:\n{ai_gen.get_chat_history(chat=chat)}")
+        print(f"Token Count: {ai_gen._count_tokens(text=chat.history)}")
