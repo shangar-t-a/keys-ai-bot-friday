@@ -106,7 +106,7 @@ class GoogleAIGeneration:
         response: GenerateContentResponse = chat.send_message(message)
         return FridayResponse(response=response.text, response_object=response)
 
-    def get_chat_history(self, chat: ChatSession) -> dict:
+    def get_chat_history(self, chat: ChatSession) -> list[str]:
         """
         Get chat history from the chat session with Friday and return the chat history as a dictionary with role as
         key and message as value.
@@ -115,9 +115,9 @@ class GoogleAIGeneration:
             chat (ChatSession): Chat session created with Friday using google generativeai ChatSession.
 
         Returns:
-            dict: Chat history from the chat session as a dictionary with role as key and message as value.
+            list[str]: Chat history from the chat session with Friday.
         """
-        return {message.role: message.parts[0].text for message in chat.history}
+        return [f"{message.role}: {message.parts[0].text}" for message in chat.history]
 
     def _count_tokens(self, text: str | Annotated[list[protos.Content], ChatSession.history]) -> int:
         """
@@ -152,7 +152,9 @@ if __name__ == "__main__":
     # Test Chat Session
     if True:
         chat = ai_gen.start_new_chat()
-        chat_response = ai_gen.send_chat_message(chat=chat, message="What is the capital of India?")
-        print(f"Chat Response: {chat_response.response.strip()}, Chat Response Object: {chat_response.response_object}")
+        chat_response = ai_gen.send_chat_message(chat=chat, message="There are 5 apples in a basket.")
+        print(f"Chat Response: {chat_response.response.strip()}")
+        chat_response = ai_gen.send_chat_message(chat=chat, message="How many apples are there?")
+        print(f"Chat Response: {chat_response.response.strip()}")
         print(f"Chat History:\n{ai_gen.get_chat_history(chat=chat)}")
         print(f"Token Count: {ai_gen._count_tokens(text=chat.history)}")
