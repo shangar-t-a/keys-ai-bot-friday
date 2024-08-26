@@ -1,0 +1,12 @@
+{
+    "dictionaryDefinitions": [
+        {
+            "name": "AIBotFridayDictionary",
+            "path": "./cspell_dictionary.txt",
+            "description": "AI Bot Friday Dictionary"
+        }
+    ],
+    "dictionaries": [
+        "AIBotFridayDictionary"
+    ]
+}
