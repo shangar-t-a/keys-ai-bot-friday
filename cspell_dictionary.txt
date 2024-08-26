@@ -1,0 +1,6 @@
+colorlog
+dotenv
+genai
+generativeai
+levelname
+protos
