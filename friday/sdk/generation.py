@@ -69,13 +69,15 @@ class GoogleAIGeneration:
         )
 
     def generate_content(
-        self, prompt: str, *, generation_config: GenerationConfig = generation_config()
+        self, prompt: str, *, generation_config: Optional[GenerationConfig] = generation_config()
     ) -> FridayResponse:
         """
         Generate content using the configured model.
 
         Args:
             prompt (str): Prompt for generating content.
+            generation_config (Optional[GenerationConfig]): Generation configuration for the model.
+                Defaults to GoogleAIGeneration.generation_config().
 
         Returns:
             FridayResponse: Response from the model for the prompt.
@@ -92,18 +94,22 @@ class GoogleAIGeneration:
         """
         return self.__model.start_chat(history=[])
 
-    def send_chat_message(self, chat: ChatSession, message: str) -> FridayResponse:
+    def send_chat_message(
+        self, chat: ChatSession, message: str, generation_config: Optional[GenerationConfig] = generation_config()
+    ) -> FridayResponse:
         """
         Send a message to the chat session with Friday and get the response from the chat session.
 
         Args:
             chat (ChatSession): Chat session created with Friday.
             message (str): Message to be sent to the chat session.
+            generation_config (Optional[GenerationConfig]): Generation configuration for the model.
+                Defaults to GoogleAIGeneration.generation_config().
 
         Returns:
             FridayResponse: Response from the chat session for the message.
         """
-        response: GenerateContentResponse = chat.send_message(message)
+        response: GenerateContentResponse = chat.send_message(message, generation_config=generation_config)
         return FridayResponse(response=response.text, response_object=response)
 
     def get_chat_history(self, chat: ChatSession) -> list[str]:
