@@ -1,11 +1,15 @@
 [tool.poetry]
 
 name = "friday"
-version = "0.0.0"
+version = "1.0.0"
 description = "Keys AI Bot (Friday)"
 authors = ["Keys (Shangar) <shangar202000@gmail.com>"]
 readme = "README.md"
 license = "LICENSE"
+repository = "https://github.com/shangar-t-a/keys-ai-bot-friday/"
+
+[tool.poetry.urls]
+changelog = "CHANGELOG.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
