@@ -88,7 +88,7 @@ def main():
                 print(f"Friday: Failed to send message to the chat session with Friday...")
                 print(f"Error: {err}")
                 continue
-            print(f"Friday: {response.response}")
+            print(f"Friday: {response.response.strip()}")
         except KeyboardInterrupt:
             break
 
