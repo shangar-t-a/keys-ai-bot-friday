@@ -1,6 +1,8 @@
 colorlog
+Deadpool
 dotenv
 genai
 generativeai
 levelname
 protos
+Shangar
