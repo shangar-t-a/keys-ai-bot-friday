@@ -1,8 +1,13 @@
 colorlog
+customtkinter
 Deadpool
 dotenv
 genai
 generativeai
 levelname
+offvalue
+onvalue
+padx
+pady
 protos
 Shangar

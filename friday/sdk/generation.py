@@ -5,12 +5,13 @@ from typing import Annotated, Optional
 from dataclasses import dataclass
 
 # Project Library
+from friday.utilities.logger import CustomLogger
 from friday.utilities.exceptions import FridayBaseException
 from friday.sdk.model import GoogleAIModel
 
 # Type hints
 from google.generativeai.generative_models import ChatSession
-from google.generativeai.types.generation_types import GenerateContentResponse
+from google.generativeai.types.generation_types import GenerateContentResponse, StopCandidateException
 from google.generativeai import GenerationConfig, protos
 
 
@@ -46,6 +47,7 @@ class GoogleAIGeneration:
             model (GoogleAIModel): Google Generative AI Model Configuration for Friday.
         """
         self.__model = genai_model.model
+        self.logger = CustomLogger(name="friday")
 
     @staticmethod
     def generation_config(
@@ -108,8 +110,14 @@ class GoogleAIGeneration:
 
         Returns:
             FridayResponse: Response from the chat session for the message.
+
+        Raises:
+            FridayGenerationError: Failed to send message to the chat session with Friday.
         """
-        response: GenerateContentResponse = chat.send_message(message, generation_config=generation_config)
+        try:
+            response: GenerateContentResponse = chat.send_message(message, generation_config=generation_config)
+        except StopCandidateException as err:
+            raise FridayGenerationError(message=str(err), logger=self.logger) from err
         return FridayResponse(response=response.text, response_object=response)
 
     def get_chat_history(self, chat: ChatSession) -> list[str]:

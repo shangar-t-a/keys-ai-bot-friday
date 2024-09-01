@@ -82,8 +82,13 @@ def main():
     while True:
         try:
             user_input = input("You: ")
-            response = friday.google_ai_generation.send_chat_message(chat=friday_chat, message=user_input)
-            print(f"Friday: {response.response}")
+            try:
+                response = friday.google_ai_generation.send_chat_message(chat=friday_chat, message=user_input)
+            except FridayGenerationError as err:
+                print(f"Friday: Failed to send message to the chat session with Friday...")
+                print(f"Error: {err}")
+                continue
+            print(f"Friday: {response.response.strip()}")
         except KeyboardInterrupt:
             break
 
