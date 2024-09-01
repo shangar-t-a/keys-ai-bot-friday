@@ -1,8 +1,15 @@
 """Friday UI Main Module."""
 
-import customtkinter
+# Standard Library
 from pathlib import Path
 from configparser import ConfigParser
+
+# Third Party Library
+import customtkinter
+
+# Project Library
+from friday.main import Friday
+from friday.sdk.generation import FridayGenerationError
 
 
 class FridayUIConstants:
@@ -31,7 +38,7 @@ class FridayUIConstants:
     CHAT_DISPLAY_FRAME_WIDGETS_PAD = 5
     APP_NAME = "FRIDAY"
     HEADER_FONT = ("Chiller", 25, "bold")
-    CHAT_DISPLAY_FONT = ("Lucida Calligraphy", 12, "bold")
+    CHAT_DISPLAY_FONT = ("Comic Sans MS", 15)
 
 
 class HeaderFrame(customtkinter.CTkFrame):
@@ -166,6 +173,12 @@ class FridayAPP(customtkinter.CTk):
         # Bind Theme Switch
         self.header_frame.dark_theme_switch.bind("<Button-1>", self._handle_theme_switch)
 
+        # Initialize Friday AI Personal Assistant
+        self.friday = Friday()
+        self.friday_chat = self.friday.google_ai_generation.start_new_chat()
+        response = self.friday.google_ai_generation.generate_content(prompt="Who are you?")
+        self._append_text_to_chat_display(text=f"Friday: {response.response.strip()}\n\n")
+
     def _friday_ui_configure(self):
         """Configure Friday AI Personal Assistant User Interface."""
         # Configure Friday UI
@@ -180,6 +193,12 @@ class FridayAPP(customtkinter.CTk):
         text = self.prompt_frame.prompt_entry.get()
         if text.strip():
             self._append_text_to_chat_display(text=f"User: {text}\n")
+            response = self._get_chat_response(user_input=text)
+            if response:
+                self._append_text_to_chat_display(text=f"Friday: {response}\n")
+            else:
+                self._append_text_to_chat_display(text=f"Friday: Apologize, Unable to process your request...\n")
+            self._append_text_to_chat_display(text="\n")
             self.prompt_frame.prompt_entry.delete(0, "end")
             return "break"
 
@@ -195,6 +214,22 @@ class FridayAPP(customtkinter.CTk):
         self.chat_display_frame.chat_display_text.configure(state="disabled")
         # Scroll to the bottom
         self.chat_display_frame.chat_display_text.see("end")
+
+    def _get_chat_response(self, user_input: str) -> str:
+        """
+        Get chat response from Friday AI Personal Assistant.
+
+        Args:
+            user_input (str): User input to send to Friday AI.
+
+        Returns:
+            str: Chat response from Friday AI.
+        """
+        try:
+            response = self.friday.google_ai_generation.send_chat_message(chat=self.friday_chat, message=user_input)
+        except FridayGenerationError:
+            return ""
+        return response.response.strip()
 
     def _handle_theme_switch(self, event=None):
         """Handle the theme switch."""
