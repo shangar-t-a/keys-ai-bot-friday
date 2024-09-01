@@ -25,7 +25,7 @@ VS Code Profile
 Install latest version of Friday from the repository using pip or poetry.
 
 > [!NOTE]
-> Friday expects .env file or mandatory env variable `GOOGLE_API_KEY` and optional `FRIDAY_LOG_DIR` variable.
+> Friday expects mandatory env variable `GOOGLE_API_KEY` and optional `FRIDAY_LOG_DIR` variable.
 
 ### Launch Friday
 
