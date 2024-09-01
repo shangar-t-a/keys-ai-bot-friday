@@ -244,6 +244,10 @@ class FridayAPP(customtkinter.CTk):
         self.mainloop()
 
 
-if __name__ == "__main__":
+def main():
     friday_ui = FridayAPP()
     friday_ui.run()
+
+
+if __name__ == "__main__":
+    main()

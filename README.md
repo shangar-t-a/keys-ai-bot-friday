@@ -2,36 +2,45 @@
 
 Keys AI bot (Friday)
 
+- [keys-ai-bot-friday](#keys-ai-bot-friday)
+  - [Developer Notes](#developer-notes)
+  - [User Guide](#user-guide)
+    - [Setup](#setup)
+    - [Launch Friday](#launch-friday)
+      - [Friday Command Line Interface (CLI)](#friday-command-line-interface-cli)
+      - [Friday User Interface (UI)](#friday-user-interface-ui)
+
 ## Developer Notes
 
-- VS Code Profile
-  - Several VS Code extensions and settings are used for standardization and linting purposes.
-  - The latest version of the code profile is maintained in the repository under
+VS Code Profile
+
+- Several VS Code extensions and settings are used for standardization and linting purposes.
+- The latest version of the code profile is maintained in the repository under
   [.vscode/Keys DEV.code-profile](.vscode/Keys%20DEV.code-profile)
 
 ## User Guide
 
-- Friday Bot can be cloned from the GitHub source [[Friday]](https://github.com/shangar-t-a/keys-ai-bot-friday).
+### Setup
 
-- Clone the repository
+Install latest version of Friday from the repository using pip or poetry.
 
-  ```bash
-  git clone https://github.com/shangar-t-a/keys-ai-bot-friday -b main
-  ```
+> [!NOTE]
+> Friday expects mandatory env variable `GOOGLE_API_KEY` and optional `FRIDAY_LOG_DIR` variable.
 
-- While in development environment, make sure to install friday dependencies. The project can be installed via
+### Launch Friday
 
-  ```bash
-  poetry install
-  ```
+#### Friday Command Line Interface (CLI)
 
-- Friday CLI can be launched from CLI using one of the below commands,
+Friday CLI can be launched from CLI using the below command,
 
-  ```bash
-  poetry run friday
+```bash
+poetry run friday_cli
+```
 
-  poetry run python friday\main.py
-  ```
+#### Friday User Interface (UI)
 
-- [***NOTE***]: Friday expects .env file or mandatory env variable `GOOGLE_API_KEY` and optional `FRIDAY_LOG_DIR`
-  variable.
+Friday UI can be launched from CLI using the below command,
+
+```bash
+poetry run friday_gui
+```
