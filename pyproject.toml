@@ -17,6 +17,7 @@ python-dotenv = "^1.0.1"
 google-generativeai = "^0.7.2"
 colorlog = "^6.8.2"
 customtkinter = "^5.2.2"
+colorama = "^0.4.6"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.2"
