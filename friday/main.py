@@ -96,7 +96,7 @@ def console_chat_color_formatter(message: str, role: Literal["User", "Friday", "
     if role == "User":
         return f"{CHAT_USER_FOREGROUND_COLOR}{CHAT_COLOR_STYLE}You: {message}{Style.RESET_ALL}"
     elif role == "Friday":
-        return f"{CHAT_FRIDAY_FOREGROUND_COLOR}{CHAT_COLOR_STYLE}Friday: {message}{Style.RESET_ALL}"
+        return f"{CHAT_FRIDAY_FOREGROUND_COLOR}{CHAT_COLOR_STYLE}Friday: {message}{Style.RESET_ALL}\n"
     elif role == "Error":
         return f"{CHAT_ERROR_FOREGROUND_COLOR}{CHAT_COLOR_STYLE}Error: {message}{Style.RESET_ALL}"
 
