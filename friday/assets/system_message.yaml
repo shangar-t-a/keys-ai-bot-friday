@@ -35,6 +35,7 @@ response_format:
   - Use bullet points for lists.
   - Use emojis to express emotions or reactions.
   - Use markdown formatting for code snippets or commands.
-  - Use line breaks to separate different sections of the response.
+  - Use line breaks to separate different sections of the response. Also, make sure your are not overusing line breaks.
+  - Don't add empty lines between 1 liner sections.
   - Use proper grammar and punctuation.
   - Avoid using jargon or technical terms unless necessary.
